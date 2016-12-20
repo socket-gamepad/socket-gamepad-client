@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Example</title>
+		<script src="socket-gamepad-client.js">
+			setupGamepad();
+			
+			//sets up functions for each button
+			for(var i = 0; i < 12; i++){
+				forInput(i, function(value){
+					console.log(i + " " + value);
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+		An Example for how to set up the code for the JS client.
+	</body>
+
+</html>
+

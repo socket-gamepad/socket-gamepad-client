@@ -1,6 +1,7 @@
-//maps buttons/analog input to their respective functions
+//maps input/buttons to their respective functions
 var map = {};
-
+//list of possible types, either buttons os axes
+enum type = {button : "buttons", axis : "axes"}
 
 //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 //tl;dr gets the param from url by name
@@ -25,17 +26,27 @@ function setupGamepad() {
 
 
 //sets up inputs and callbacks as per user discretion
-function forInput(input, callback){
-	map[input] = callback;
+//type maps to HTML5 gamepad object properties
+function forInput(type, inputNum, callback){
+	map[type][inputNum] = callback;
 	
 	io.on('sendgamepad', function(input){
 		console.log(input);
 		
-		for(control in input.control){
-			if(input[control] != 0){
-				map[input.control](input.value);
+		//handles buttons
+		for(var i = 0; i < input.buttons.length; i++){
+			if(input[i] != 0){
+				map[type.button][i](input.buttons[i].value);
 			}
 		}
+		
+		//handles axes
+		for(var i = 0; i < input.axes.length; i++){
+			if(input[i] != 0){
+				map[type.axis][i](input.axes[i]);
+			}
+		}
+		
 		
 	});
 }
