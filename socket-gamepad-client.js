@@ -20,7 +20,7 @@ function getParameterByName(name, url) {
 //only run once per client
 function setupGamepad() {
 	var roomId = getParameterByName("vrgamepad");
-	io.emit('gameclientjoin', {room: roomId});
+	io.emit('gameclientjoined', {room: roomId});
 }
 
 
@@ -28,7 +28,7 @@ function setupGamepad() {
 function forInput(input, callback){
 	map[input] = callback;
 	
-	io.on('sendinput', function(input){
+	io.on('sendgamepad', function(input){
 		console.log(input);
 		
 		for(control in input.control){
@@ -38,6 +38,11 @@ function forInput(input, callback){
 		}
 		
 	});
-
 }
 
+//sets up a callback for what to do when the gamepad disconnects
+function onDisconnect(callback){
+	io.on('gamepadleft', function(input){
+		callback();
+	});
+}
