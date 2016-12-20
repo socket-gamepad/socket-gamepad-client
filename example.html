@@ -3,13 +3,14 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Example</title>
-		<script src="socket-gamepad-client.js">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js"></script>
+		<script src="socket-gamepad-client.js"></script>
+		<script>
 			setupGamepad();
-			
 			//sets up functions for each button
-			for(var i = 0; i < 12; i++){
-				forInput(i, function(value){
-					console.log(i + " " + value);
+			for(var i = 0; i < 17; i++){
+				forInput("buttons", i, function(value){
+					console.log(i.toString() + " " + value);
 				});
 			}
 		</script>

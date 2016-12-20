@@ -1,7 +1,13 @@
+var socket = io('http://localhost:3000');
+
+
 //maps input/buttons to their respective functions
-var map = {};
+var map = {
+	buttons: {},
+	axes: {}
+}
 //list of possible types, either buttons os axes
-enum type = {button : "buttons", axis : "axes"}
+var type = {button : "buttons", axis : "axes"}
 
 //http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 //tl;dr gets the param from url by name
@@ -21,7 +27,7 @@ function getParameterByName(name, url) {
 //only run once per client
 function setupGamepad() {
 	var roomId = getParameterByName("vrgamepad");
-	io.emit('gameclientjoined', {room: roomId});
+	socket.emit('gameclientjoined', {room: roomId});
 }
 
 
@@ -29,31 +35,31 @@ function setupGamepad() {
 //type maps to HTML5 gamepad object properties
 function forInput(type, inputNum, callback){
 	map[type][inputNum] = callback;
-	
-	io.on('sendgamepad', function(input){
-		console.log(input);
-		
-		//handles buttons
-		for(var i = 0; i < input.buttons.length; i++){
-			if(input[i] != 0){
-				map[type.button][i](input.buttons[i].value);
-			}
-		}
-		
-		//handles axes
-		for(var i = 0; i < input.axes.length; i++){
-			if(input[i] != 0){
-				map[type.axis][i](input.axes[i]);
-			}
-		}
-		
-		
-	});
 }
+
+socket.on('gamepad', function(input){
+	// console.log(input);
+	
+	//handles buttons
+	for(var i = 0; i < input.buttons.length; i++){
+		if(input[i] != 0){
+			map.buttons[i](input.buttons[i].value);
+		}
+	}
+	
+	//handles axes
+	for(var i = 0; i < input.axes.length; i++){
+		if(input[i] != 0){
+			// map.axes[i](input.axes[i]);
+		}
+	}
+	
+	
+});
 
 //sets up a callback for what to do when the gamepad disconnects
 function onDisconnect(callback){
-	io.on('gamepadleft', function(input){
+	socket.on('gamepadleft', function(input){
 		callback();
 	});
 }
