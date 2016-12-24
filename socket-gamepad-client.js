@@ -42,16 +42,19 @@ socket.on('gamepad', function(input){
 	
 	//handles buttons
 	for(var i = 0; i < input.buttons.length; i++){
-		if(input[i] != 0){
-			map.buttons[i](input.buttons[i].value);
-		}
+	    (function(i){
+            if(input[i] != 0){
+			    map.buttons[i](input.buttons[i].value);
+		    }
+        })(i);
 	}
 	
 	//handles axes
 	for(var i = 0; i < input.axes.length; i++){
-		if(input[i] != 0){
-			// map.axes[i](input.axes[i]);
-		}
+		(function(i){
+        if(input[i] != 0){
+		    map.axes[i](input.axes[i]);
+		})(i);
 	}
 	
 	
